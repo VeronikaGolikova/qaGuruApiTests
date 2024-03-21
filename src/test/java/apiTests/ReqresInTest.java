@@ -1,5 +1,6 @@
 package apiTests;
 
+import models.ListUsersModel;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -8,7 +9,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
-public class ReqresInTest extends TestBase{
+public class ReqresInTest{
 
     int numPage = 2;
     int enptyNumPage = 3;
@@ -18,6 +19,8 @@ public class ReqresInTest extends TestBase{
 
     @Test
     void getListUsers() {
+        ListUsersModel authData = new ListUsersModel();
+        authData.setPageNumber(2);
         given()
                 .log().uri()
                 .log().method()
