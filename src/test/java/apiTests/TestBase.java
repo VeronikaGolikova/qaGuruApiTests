@@ -1,5 +1,13 @@
 package apiTests;
 
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeAll;
+
 public class TestBase {
-    static final String PATH = "https://reqres.in/";
+
+    @BeforeAll
+    static void setUp() {
+        RestAssured.baseURI = "https://reqres.in";
+        RestAssured.basePath = "/api";
+    }
 }
