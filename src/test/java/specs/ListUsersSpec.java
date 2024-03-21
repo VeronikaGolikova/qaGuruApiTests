@@ -13,14 +13,14 @@ import static io.restassured.http.ContentType.JSON;
 public class ListUsersSpec {
 
     static final String PATH = "https://reqres.in/";
-    public static RequestSpecification loginRequestSpec = with()
-            .filter(withCustomTemplates())
-            .log().uri()
-            .log().body()
-            .log().headers()
-            .contentType(JSON)
-            .baseUri(PATH)
-            .basePath("/api/login");
+//    public static RequestSpecification loginRequestSpec = with()
+//            .filter(withCustomTemplates())
+//            .log().uri()
+//            .log().body()
+//            .log().headers()
+//            .contentType(JSON)
+//            .baseUri(PATH)
+//            .basePath("/api/login");
 
     public static ResponseSpecification loginResponseSpec = new ResponseSpecBuilder()
             .expectStatusCode(200)

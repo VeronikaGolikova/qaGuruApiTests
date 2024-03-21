@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ListUsersModel {
-    int pageNumber;
+public class UserResponseModel {
+    Data data;
+    Support support;
 }
