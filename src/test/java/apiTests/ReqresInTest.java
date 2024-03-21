@@ -8,13 +8,15 @@ import models.UpdateResponseModel;
 import models.UserResponseModel;
 import org.junit.jupiter.api.Test;
 
-import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static specs.GeneralSpec.deleteResponseSpec;
+import static specs.GeneralSpec.missingUserResponseSpec;
+import static specs.GeneralSpec.responseSpec;
+import static specs.GeneralSpec.requestSpec;
 
 public class ReqresInTest extends TestBase{
 
@@ -25,15 +27,11 @@ public class ReqresInTest extends TestBase{
 
         ListUsersResponseModel response = step("Make request", ()->
                 given()
-                .log().uri()
-                .log().headers()
-                .log().body()
+                        .spec(requestSpec)
                 .when()
                 .get("users?page=2")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                        .spec(responseSpec)
                 .body(matchesJsonSchemaInClasspath("schemas/listUsersSchema.json"))
                 .extract().as(ListUsersResponseModel.class));
 
@@ -48,15 +46,11 @@ public class ReqresInTest extends TestBase{
     void getListUsersNegative() {
         ListUsersResponseModel response = step("Make request", ()->
                 given()
-                .log().uri()
-                .log().headers()
-                .log().body()
+                        .spec(requestSpec)
                 .when()
                 .get("users?page=3")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                        .spec(responseSpec)
                 .body(matchesJsonSchemaInClasspath("schemas/emptyListUsersSchema.json"))
                 .extract().as(ListUsersResponseModel.class));
 
@@ -70,15 +64,11 @@ public class ReqresInTest extends TestBase{
     void getSingleUser() {
         UserResponseModel response = step("Make request", ()->
                 given()
-                .log().uri()
-                .log().headers()
-                .log().body()
+                        .spec(requestSpec)
                 .when()
                 .get( "users/2" )
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                        .spec(responseSpec)
                 .body(matchesJsonSchemaInClasspath("schemas/userSchema.json"))
                 .extract().as(UserResponseModel.class));
 
@@ -96,15 +86,11 @@ public class ReqresInTest extends TestBase{
     void getEmptyUser() {
         ListUsersResponseModel response = step("Make request", ()->
                 given()
-                .log().uri()
-                .log().headers()
-                .log().body()
+                        .spec(requestSpec)
                 .when()
                 .get( "users/")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                        .spec(responseSpec)
                 .body(matchesJsonSchemaInClasspath("schemas/listUsersSchema.json"))
                 .extract().as(ListUsersResponseModel.class));
 
@@ -119,15 +105,11 @@ public class ReqresInTest extends TestBase{
     void getSingleMissingUser() {
         step("Make request", ()->
         given()
-                .log().uri()
-                .log().headers()
-                .log().body()
+                .spec(requestSpec)
                 .when()
                 .get( "users/102")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(404)
+                .spec(missingUserResponseSpec)
                 .extract().response());
     }
 
@@ -138,19 +120,12 @@ public class ReqresInTest extends TestBase{
         registerBody.setPassword("pistol");
         RegisterResponseModel response = step("Make request", ()->
                 given()
+                        .spec(requestSpec)
                 .body(registerBody)
-                .contentType(JSON)
-                .log().uri()
-                .log().headers()
-                .log().body()
-
                 .when()
                 .post("register")
-
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                        .spec(responseSpec)
                 .body(matchesJsonSchemaInClasspath("schemas/registerSchema.json"))
                 .extract().as(RegisterResponseModel.class));
 
@@ -168,20 +143,12 @@ public class ReqresInTest extends TestBase{
 
         UpdateResponseModel response = step("Make request", ()->
                 given()
-                .filter(withCustomTemplates())
+                        .spec(requestSpec)
                 .body(updateBody)
-                .contentType(JSON)
-                .log().uri()
-                .log().headers()
-                .log().body()
-
                 .when()
                 .patch("users/2")
-
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                        .spec(responseSpec)
                 .body(matchesJsonSchemaInClasspath("schemas/patchUpdateSchema.json"))
                 .extract().as(UpdateResponseModel.class));
 
@@ -195,18 +162,11 @@ public class ReqresInTest extends TestBase{
     void deleteSuccessful() {
         step("Make request", ()->
         given()
-                .contentType(JSON)
-                .log().uri()
-                .log().headers()
-                .log().body()
-
+                .spec(requestSpec)
                 .when()
                 .delete("users/2")
-
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(204)
+                .spec(deleteResponseSpec)
                 .extract().response());
     }
 }
