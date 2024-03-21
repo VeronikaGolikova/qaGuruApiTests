@@ -1,12 +1,19 @@
 plugins {
     id 'java'
     id 'io.qameta.allure' version '2.11.2'
+    id "io.freefair.lombok" version "6.0.0-m2"
 }
 
 group = 'ru.veronika'
 version = '1.0-SNAPSHOT'
 
-def allureVersion = "2.25.0"
+
+repositories {
+    mavenCentral()
+}
+
+def restAssuredVersion = "5.3.1",
+    allureVersion = "2.21.0"
 
 allure {
     allureReport {
@@ -22,18 +29,14 @@ allure {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     testImplementation(
-            'io.rest-assured:rest-assured:5.4.0',
-            'io.rest-assured:json-schema-validator:5.4.0',
-            "org.junit.jupiter:junit-jupiter:5.9.3",
-            "org.aeonbits.owner:owner:1.0.12",
-            "com.github.javafaker:javafaker:1.0.2",
-            "io.qameta.allure:allure-selenide:$allureVersion",
+            "io.rest-assured:rest-assured:$restAssuredVersion",
+            "io.rest-assured:json-schema-validator:$restAssuredVersion",
+            "io.qameta.allure:allure-rest-assured:$allureVersion",
+            'org.junit.jupiter:junit-jupiter:5.10.0',
+            'org.aeonbits.owner:owner:1.0.12',
+            'com.github.javafaker:javafaker:1.0.2',
             'org.slf4j:slf4j-simple:2.0.7'
     )
 }
