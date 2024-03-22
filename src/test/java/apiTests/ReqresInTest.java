@@ -13,10 +13,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static specs.GeneralSpec.deleteResponseSpec;
-import static specs.GeneralSpec.missingUserResponseSpec;
-import static specs.GeneralSpec.responseSpec;
-import static specs.GeneralSpec.requestSpec;
+import static specs.GeneralSpec.*;
 
 public class ReqresInTest extends TestBase{
 
@@ -29,9 +26,9 @@ public class ReqresInTest extends TestBase{
                 given()
                         .spec(requestSpec)
                 .when()
-                .get("users?page=2")
+                .get("/api/users?page=2")
                 .then()
-                        .spec(responseSpec)
+                        .spec(responseSpec200OkWithLogging)
                 .body(matchesJsonSchemaInClasspath("schemas/listUsersSchema.json"))
                 .extract().as(ListUsersResponseModel.class));
 
@@ -48,9 +45,9 @@ public class ReqresInTest extends TestBase{
                 given()
                         .spec(requestSpec)
                 .when()
-                .get("users?page=3")
+                .get("/api/users?page=3")
                 .then()
-                        .spec(responseSpec)
+                        .spec(responseSpec200OkWithLogging)
                 .body(matchesJsonSchemaInClasspath("schemas/emptyListUsersSchema.json"))
                 .extract().as(ListUsersResponseModel.class));
 
@@ -66,9 +63,9 @@ public class ReqresInTest extends TestBase{
                 given()
                         .spec(requestSpec)
                 .when()
-                .get( "users/2" )
+                .get( "/api/users/2" )
                 .then()
-                        .spec(responseSpec)
+                        .spec(responseSpec200OkWithLogging)
                 .body(matchesJsonSchemaInClasspath("schemas/userSchema.json"))
                 .extract().as(UserResponseModel.class));
 
@@ -88,9 +85,9 @@ public class ReqresInTest extends TestBase{
                 given()
                         .spec(requestSpec)
                 .when()
-                .get( "users/")
+                .get( "/api/users/")
                 .then()
-                        .spec(responseSpec)
+                        .spec(responseSpec200OkWithLogging)
                 .body(matchesJsonSchemaInClasspath("schemas/listUsersSchema.json"))
                 .extract().as(ListUsersResponseModel.class));
 
@@ -107,9 +104,10 @@ public class ReqresInTest extends TestBase{
         given()
                 .spec(requestSpec)
                 .when()
-                .get( "users/102")
+                .get( "/api/users/102")
                 .then()
-                .spec(missingUserResponseSpec)
+                .statusCode(404)
+                .spec(loggingResponseSpec)
                 .extract().response());
     }
 
@@ -123,9 +121,9 @@ public class ReqresInTest extends TestBase{
                         .spec(requestSpec)
                 .body(registerBody)
                 .when()
-                .post("register")
+                .post("/api/register")
                 .then()
-                        .spec(responseSpec)
+                        .spec(responseSpec200OkWithLogging)
                 .body(matchesJsonSchemaInClasspath("schemas/registerSchema.json"))
                 .extract().as(RegisterResponseModel.class));
 
@@ -146,9 +144,9 @@ public class ReqresInTest extends TestBase{
                         .spec(requestSpec)
                 .body(updateBody)
                 .when()
-                .patch("users/2")
+                .patch("/api/users/2")
                 .then()
-                        .spec(responseSpec)
+                        .spec(responseSpec200OkWithLogging)
                 .body(matchesJsonSchemaInClasspath("schemas/patchUpdateSchema.json"))
                 .extract().as(UpdateResponseModel.class));
 
@@ -164,9 +162,10 @@ public class ReqresInTest extends TestBase{
         given()
                 .spec(requestSpec)
                 .when()
-                .delete("users/2")
+                .delete("/api/users/2")
                 .then()
-                .spec(deleteResponseSpec)
+                .statusCode(204)
+                .spec(loggingResponseSpec)
                 .extract().response());
     }
 }
