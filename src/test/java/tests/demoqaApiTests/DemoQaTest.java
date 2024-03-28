@@ -6,6 +6,7 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.selenide.AllureSelenide;
 import io.restassured.response.Response;
 import model.demoqa.LoginRequestModel;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import page.AuthorizedWebPage;
 
@@ -14,6 +15,7 @@ import static io.restassured.RestAssured.given;
 import static specs.GeneralSpec.requestSpec;
 import static specs.GeneralSpec.responseSpec200OkWithLogging;
 
+@Tag("demoQa")
 @Owner("golikovavi")
 @Feature("Проверка веб-страниц авторизованным через API пользователем")
 public class DemoQaTest extends TestBase {
