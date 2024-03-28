@@ -6,6 +6,7 @@ import io.qameta.allure.Owner;
 import io.qameta.allure.selenide.AllureSelenide;
 import io.restassured.response.Response;
 import model.demoqa.LoginRequestModel;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import page.AuthorizedWebPage;
@@ -23,6 +24,7 @@ public class DemoQaTest extends TestBase {
     AuthorizedWebPage authorizedWebPage = new AuthorizedWebPage();
 
     @Test
+    @DisplayName("Авторизация через API с последующим открытием сайта авторизованным пользователем")
     void successfulLoginWithApiAndUiTest() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         loginRequestModel
@@ -44,6 +46,7 @@ public class DemoQaTest extends TestBase {
     }
 
     @Test
+    @DisplayName("Авторизация через API с последующим открытием сайта авторизованным пользователем и разлогиниванием через UI")
     void successfulLoginWithApiAndUiLogoutTest() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         loginRequestModel
