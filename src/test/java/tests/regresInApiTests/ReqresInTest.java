@@ -1,11 +1,11 @@
-package apiTests;
+package tests.regresInApiTests;
 
-import models.ListUsersResponseModel;
-import models.RegisterRequestModel;
-import models.RegisterResponseModel;
-import models.UpdateRequestModel;
-import models.UpdateResponseModel;
-import models.UserResponseModel;
+import model.regressin.ListUsersResponseModel;
+import model.regressin.RegisterRequestModel;
+import model.regressin.RegisterResponseModel;
+import model.regressin.UpdateRequestModel;
+import model.regressin.UpdateResponseModel;
+import model.regressin.UserResponseModel;
 import org.junit.jupiter.api.Test;
 
 import static io.qameta.allure.Allure.step;

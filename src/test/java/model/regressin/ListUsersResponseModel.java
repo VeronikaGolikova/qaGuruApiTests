@@ -1,4 +1,4 @@
-package models;
+package model.regressin;
 
 import lombok.Getter;
 import lombok.Setter;
