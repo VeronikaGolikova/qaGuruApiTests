@@ -1,71 +1,48 @@
 package tests.demoqaApiTests;
 
-import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
-import io.qameta.allure.selenide.AllureSelenide;
-import io.restassured.response.Response;
 import model.demoqa.LoginRequestModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import page.AuthorizedWebPage;
-
-import static io.qameta.allure.Allure.step;
-import static io.restassured.RestAssured.given;
-import static specs.GeneralSpec.requestSpec;
-import static specs.GeneralSpec.responseSpec200OkWithLogging;
+import tests.extensions.WithLogin;
 
 @Tag("demoQa")
 @Owner("golikovavi")
 @Feature("Проверка веб-страниц авторизованным через API пользователем")
 public class DemoQaTest extends TestBase {
-    LoginRequestModel loginRequestModel = new LoginRequestModel();
+    LoginRequestModel loginRequestModel = new LoginRequestModel()
+            .setUserName("ShocoArts")
+            .setPassword("QaqA19091992!");
     AuthorizedWebPage authorizedWebPage = new AuthorizedWebPage();
 
     @Test
+    @WithLogin
     @DisplayName("Авторизация через API с последующим открытием сайта авторизованным пользователем")
     void successfulLoginWithApiAndUiTest() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
-        loginRequestModel
-                .setUserName("ShocoArts")
-                .setPassword("QaqA19091992!");
-
-        Response response = step("Сделать запрос через Api для получения token, id, expires", ()->
-                given()
-                .spec(requestSpec)
-                .body(loginRequestModel)
-                .when()
-                .post("/Account/v1/Login")
-                .then()
-                .spec(responseSpec200OkWithLogging)
-                .extract().response());
-
-        authorizedWebPage.openWebBrowserAndAddCookies(response);
-        authorizedWebPage.openProfilePage(loginRequestModel.getUserName());
+        authorizedWebPage.openProfilePage();
+        authorizedWebPage.openProfilePageShouldHaveLoginText(loginRequestModel.getUserName());
     }
 
     @Test
+    @WithLogin
     @DisplayName("Авторизация через API с последующим открытием сайта авторизованным пользователем и разлогиниванием через UI")
     void successfulLoginWithApiAndUiLogoutTest() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
-        loginRequestModel
-                .setUserName("ShocoArts")
-                .setPassword("QaqA19091992!");
-
-        Response response = step("Сделать запрос через Api для получения token, id, expires", ()->
-                given()
-                        .spec(requestSpec)
-                        .body(loginRequestModel)
-                        .when()
-                        .post("/Account/v1/Login")
-                        .then()
-                        .spec(responseSpec200OkWithLogging)
-                        .extract().response());
-
-        authorizedWebPage.openWebBrowserAndAddCookies(response);
-        authorizedWebPage.openProfilePage(loginRequestModel.getUserName());
+        authorizedWebPage.openProfilePage();
+        authorizedWebPage.openProfilePageShouldHaveLoginText(loginRequestModel.getUserName());
         authorizedWebPage.clickLogout();
         authorizedWebPage.disableLogoutButton();
+    }
+
+    @Test
+    @WithLogin
+    @DisplayName("Проверить, что лист книг пустой")
+    void bookListIsEmpty() {
+        authorizedWebPage.openProfilePage();
+        authorizedWebPage.openProfilePageShouldHaveLoginText(loginRequestModel.getUserName());
+        authorizedWebPage.checkEmptyCells();
+        authorizedWebPage.checkNoDataMessage();
     }
 }
