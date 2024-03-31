@@ -1,4 +1,4 @@
-package tests.extensions;
+package extensions;
 
 import io.restassured.response.Response;
 import model.demoqa.LoginRequestModel;

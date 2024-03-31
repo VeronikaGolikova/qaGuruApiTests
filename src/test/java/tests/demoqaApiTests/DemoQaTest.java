@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import page.AuthorizedWebPage;
-import tests.extensions.WithLogin;
+import extensions.WithLogin;
 
 @Tag("demoQa")
 @Owner("golikovavi")
